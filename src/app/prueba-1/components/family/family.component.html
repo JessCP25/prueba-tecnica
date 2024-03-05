@@ -1,1 +1,21 @@
-<p>family works!</p>,
+<div class="card w-full py-7 flex flex-column align-items-center gap-5">
+  <div>
+    <label for="buttondisplay" class="font-bold block mb-2">
+      Fecha de Nacimiento
+    </label>
+    <p-calendar [showIcon]="true" inputId="buttondisplay"></p-calendar>
+  </div>
+  <div>
+    <label for="buttondisplay2" class="font-bold block mb-2">
+      Fecha de Registro
+    </label>
+    <p-calendar [showIcon]="true" inputId="buttondisplay2"></p-calendar>
+  </div>
+  <div>
+    <label for="buttondisplay3" class="font-bold block mb-2">
+      Recha de Nacimiento (Cónyuge)
+    </label>
+    <p-calendar [showIcon]="true" inputId="buttondisplay3"></p-calendar>
+  </div>
+  <p-button type="submit" label="Siguiente" icon="pi pi-arrow-right"></p-button>
+</div>
