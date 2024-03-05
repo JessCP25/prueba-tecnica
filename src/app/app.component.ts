@@ -25,16 +25,12 @@ export class AppComponent implements OnInit {
         routerLink: 'personal',
       },
       {
-        label: 'Seat',
-        routerLink: 'seat',
+        label: 'Family',
+        routerLink: 'family',
       },
       {
-        label: 'Payment',
-        routerLink: 'payment',
-      },
-      {
-        label: 'Confirmation',
-        routerLink: 'confirmation',
+        label: 'Academic',
+        routerLink: 'academic',
       },
     ];
   }
