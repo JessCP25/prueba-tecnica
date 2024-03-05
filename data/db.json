@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "dni": "71654889",
+      "name": "Juan Luis",
+      "lastName": "Esteban Gómez",
+      "age": 35,
+      "city": "Lima",
+      "birthDate": "11-02-1990",
+      "registrationDate": "30-01-2021",
+      "spouseBirthDate": "23-08-1996",
+      "degree": "Master",
+      "workplace": "Caja Huancayo",
+      "salary": 2000,
+      "experienceYears": 2
+    }
+  ]
+
+}
