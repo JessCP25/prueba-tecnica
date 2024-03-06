@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "backend": "json-server --watch data/db.json",
+    "backend-custom": "node data/customize.js && npm run backend",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
