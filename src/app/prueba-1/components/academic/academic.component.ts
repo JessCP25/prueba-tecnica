@@ -13,6 +13,7 @@ import { Degree, User, WorkPlace } from '../../interfaces/user.interface';
 import { WorkPlaceService } from '../../services/work-place.service';
 import { Router } from '@angular/router';
 import { EditUsersService } from '../../services/edit-users.service';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-academic',
@@ -29,6 +30,7 @@ import { EditUsersService } from '../../services/edit-users.service';
   styleUrl: './academic.component.css',
 })
 export class AcademicComponent implements OnInit {
+  userInfo!: User;
   degrees: string[] = ['Bachiller', 'Master', 'Doctor'];
   filteredDegrees: string[] = [];
 
@@ -40,7 +42,8 @@ export class AcademicComponent implements OnInit {
     private validatorsService: ValidatorsService,
     private workPlaceServices: WorkPlaceService,
     private router: Router,
-    private editUsersService: EditUsersService
+    private editUsersService: EditUsersService,
+    private usersService: UsersService
   ) {}
 
   academicInformationForm = this.fb.group({
@@ -52,6 +55,7 @@ export class AcademicComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.userInfo = this.editUsersService.infoUser()!;
     this.workPlaceServices.getWorkPlaces().subscribe((res) => {
       if (res) {
         this.workPlaces = res.map((place) => place.workPlace);
@@ -88,6 +92,10 @@ export class AcademicComponent implements OnInit {
     this.editUsersService.addInformation(
       this.academicInformationForm.value as User
     );
-    console.log(this.editUsersService.infoUser());
+    this.usersService.updateUser(
+      this.userInfo.id!,
+      this.editUsersService.infoUser()!
+    ).subscribe();
+    this.router.navigateByUrl('/result');
   }
 }

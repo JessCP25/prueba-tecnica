@@ -15,4 +15,9 @@ export class UsersService {
     return this.http.get<User>(`${this.baseURL}/users/${idUser}`);
   }
 
+  updateUser(idUser: number, user:Partial<User>){
+    const body = user;
+    return this.http.patch<User>(`${this.baseURL}/users/${idUser}`, body );
+  }
+
 }

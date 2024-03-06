@@ -26,6 +26,14 @@ export const routes: Routes = [
     canActivate: [isUserGuard],
   },
   {
+    path: 'result',
+    loadComponent: () =>
+      import('./prueba-1/components/result/result.component').then(
+        (c) => c.ResultComponent
+      ),
+    canActivate: [isUserGuard],
+  },
+  {
     path: '**',
     redirectTo: 'personal',
   },

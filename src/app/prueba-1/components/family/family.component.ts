@@ -51,7 +51,22 @@ export class FamilyComponent {
       this.personalInformationForm.markAllAsTouched();
       return;
     }
-    this.editUsersService.addInformation(this.personalInformationForm.value as User);
+
+    const formData = this.personalInformationForm.value;
+
+    formData.birthDate = this.convertToUTCMinus5(formData.birthDate!);
+    formData.registrationDate = this.convertToUTCMinus5(formData.registrationDate!);
+    if(formData.spouseBirthDate){
+      formData.spouseBirthDate = this.convertToUTCMinus5(formData.spouseBirthDate);
+    }
+
+    this.editUsersService.addInformation(formData as User);
     this.router.navigateByUrl('/academic');
+  }
+
+  private convertToUTCMinus5(date: string): string {
+    const utcDate = new Date(date);
+    utcDate.setUTCHours(utcDate.getUTCHours() - 5);
+    return utcDate.toISOString();
   }
 }

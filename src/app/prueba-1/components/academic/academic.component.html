@@ -12,7 +12,6 @@
       formControlName="degree"
       [suggestions]="filteredDegrees"
       (completeMethod)="filterDegree($event)"
-      field="name"
     ></p-autoComplete>
     @if (isInvalidField('degree')) {
     <span class="block mt-2 text-red-500 text-xs font-normal"
@@ -31,7 +30,6 @@
       [dropdown]="true"
       [suggestions]="filteredWorkPlaces"
       (completeMethod)="filterWorkPlaces($event)"
-      field="workPlace"
     ></p-autoComplete>
     @if (isInvalidField('workplace')) {
     <span class="block mt-2 text-red-500 text-xs font-normal"
