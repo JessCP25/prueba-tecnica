@@ -1,26 +1,33 @@
 <div class="card flex flex-wrap justify-content-center gap-3 p-5">
-  <p-inputNumber placeholder="Ingrese DNI" pInputNumber />
-  <p-button type="button" label="Buscar" icon="pi pi-search"></p-button>
+  <input placeholder="Ingrese DNI" #DNIUser pInputText />
+  <p-button
+    (click)="searchUser(+DNIUser.value)"
+    type="button"
+    label="Buscar"
+    icon="pi pi-search"
+  ></p-button>
 </div>
 <div
   [formGroup]="personalInformationForm"
+  (ngSubmit)="next()"
   class="card w-7 m-auto flex flex-column aling-items-center justify-content-center gap-5 p-5"
 >
   <div class="flex flex-column gap-2">
     <label for="name">Nombres</label>
-    <input formControlName="name" [disabled]="true" pInputText />
+    <input formControlName="name" pInputText />
   </div>
   <div class="flex flex-column gap-2">
     <label for="username">Apellidos</label>
-    <input [disabled]="true" formControlName="lastName" pInputText />
+    <input formControlName="lastName" pInputText />
   </div>
   <div class="flex flex-column gap-2">
     <label for="username">Edad</label>
-    <input formControlName="age" [disabled]="true" pInputText />
+    <input formControlName="age" pInputText />
   </div>
   <div class="flex flex-column gap-2 mb-3">
     <label for="city">Ciudad</label>
-    <input formControlName="city" [disabled]="true" pInputText />
+    <input formControlName="city" pInputText />
   </div>
-  <p-button type="submit" label="Siguiente" icon="pi pi-arrow-right"></p-button>
+  <!-- <pre> {{ personalInformationForm.errors | json }} </pre> -->
+  <p-button type="submit" (click)="next()" label="Siguiente" icon="pi pi-arrow-right"></p-button>
 </div>
