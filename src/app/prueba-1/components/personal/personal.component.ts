@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, effect, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { UsersService } from '../../services/users.service';
 import { Router } from '@angular/router';
+import { User } from '../../interfaces/user.interface';
+import { EditUsersService } from '../../services/edit-users.service';
 @Component({
   selector: 'app-personal',
   standalone: true,
@@ -25,7 +27,8 @@ export class PersonalComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UsersService,
-    private router: Router
+    private router: Router,
+    private editUsersService: EditUsersService
   ) {
     this.personalInformationForm.disable();
   }
@@ -37,6 +40,7 @@ export class PersonalComponent {
     city: ['', [Validators.required]],
   });
 
+
   searchUser(idUser: number) {
     if (idUser) {
       this.userService.searchUser(idUser).subscribe((res) => {
@@ -47,6 +51,7 @@ export class PersonalComponent {
             age: res.age.toString(),
             city: res.city,
           });
+          this.editUsersService.newUser(res);
           this.isUser = true;
         }
       });

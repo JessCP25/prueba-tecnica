@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { isUserGuard } from './prueba-1/guards/is-user.guard';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,7 @@ export const routes: Routes = [
       import('./prueba-1/components/family/family.component').then(
         (c) => c.FamilyComponent
       ),
+    canActivate: [isUserGuard],
   },
   {
     path: 'academic',
@@ -21,6 +23,7 @@ export const routes: Routes = [
       import('./prueba-1/components/academic/academic.component').then(
         (c) => c.AcademicComponent
       ),
+    canActivate: [isUserGuard],
   },
   {
     path: '**',

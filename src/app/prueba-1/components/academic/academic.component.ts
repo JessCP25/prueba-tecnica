@@ -9,8 +9,10 @@ import {
 } from 'primeng/autocomplete';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidatorsService } from '../../services/validators.service';
-import { Degree, WorkPlace } from '../../interfaces/user.interface';
+import { Degree, User, WorkPlace } from '../../interfaces/user.interface';
 import { WorkPlaceService } from '../../services/work-place.service';
+import { Router } from '@angular/router';
+import { EditUsersService } from '../../services/edit-users.service';
 
 @Component({
   selector: 'app-academic',
@@ -27,20 +29,18 @@ import { WorkPlaceService } from '../../services/work-place.service';
   styleUrl: './academic.component.css',
 })
 export class AcademicComponent implements OnInit {
-  degrees: Degree[] = [
-    { id: 1, name: 'Bachiller' },
-    { id: 2, name: 'Master' },
-    { id: 3, name: 'Doctor' },
-  ];
-  filteredDegrees: Degree[] = [];
+  degrees: string[] = ['Bachiller', 'Master', 'Doctor'];
+  filteredDegrees: string[] = [];
 
-  workPlaces: WorkPlace[] = [];
-  filteredWorkPlaces: WorkPlace[] = [];
+  workPlaces: string[] = [];
+  filteredWorkPlaces: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private validatorsService: ValidatorsService,
-    private workPlaceServices: WorkPlaceService
+    private workPlaceServices: WorkPlaceService,
+    private router: Router,
+    private editUsersService: EditUsersService
   ) {}
 
   academicInformationForm = this.fb.group({
@@ -48,29 +48,28 @@ export class AcademicComponent implements OnInit {
     workplace: ['', [Validators.required]],
     salary: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
     career: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-    experienceYears: ['', [Validators.required]]
+    experienceYears: ['', [Validators.required]],
   });
 
   ngOnInit() {
     this.workPlaceServices.getWorkPlaces().subscribe((res) => {
       if (res) {
-        this.workPlaces = res;
+        this.workPlaces = res.map((place) => place.workPlace);
       }
     });
   }
 
   filterDegree(event: AutoCompleteCompleteEvent) {
     let query = event.query;
-    this.filteredDegrees = this.degrees.filter(
-      (country) => country.name.toLowerCase().indexOf(query.toLowerCase()) === 0
+    this.filteredDegrees = this.degrees.filter((degree) =>
+      degree.toLowerCase().includes(query.toLowerCase())
     );
   }
 
   filterWorkPlaces(event: AutoCompleteCompleteEvent) {
     let query = event.query;
-    this.filteredWorkPlaces = this.workPlaces.filter(
-      (country) =>
-        country.workPlace.toLowerCase().indexOf(query.toLowerCase()) === 0
+    this.filteredWorkPlaces = this.workPlaces.filter((workPlace) =>
+      workPlace.toLowerCase().includes(query.toLowerCase())
     );
   }
 
@@ -79,5 +78,16 @@ export class AcademicComponent implements OnInit {
       this.academicInformationForm,
       field
     );
+  }
+
+  submitInformation() {
+    if (this.academicInformationForm.invalid) {
+      this.academicInformationForm.markAllAsTouched();
+      return;
+    }
+    this.editUsersService.addInformation(
+      this.academicInformationForm.value as User
+    );
+    console.log(this.editUsersService.infoUser());
   }
 }
