@@ -1,29 +1,106 @@
 <div
-  class="card w-7 mt-8 formgrid grid h-full m-auto aling-items-center justify-content-center gap-5 p-5"
+  [formGroup]="academicInformationForm"
+  class="card w-7 mt-2formgrid grid h-full m-auto aling-items-center justify-content-center gap-5 p-5"
 >
   <div class="field col-12 md:col-5">
     <label for="username">Grado Académico</label>
     <p-autoComplete
-      [suggestions]="suggestions"
-      (completeMethod)="search($event)"
+      [ngClass]="{
+        'ng-invalid': isInvalidField('degree'),
+        'ng-dirty': isInvalidField('degree')
+      }"
+      formControlName="degree"
+      [suggestions]="filteredDegrees"
+      (completeMethod)="filterDegree($event)"
+      field="name"
     ></p-autoComplete>
+    @if (isInvalidField('degree')) {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    }
   </div>
   <div class="field col-12 md:col-5">
     <label for="username">Lugar de Trabajo</label>
     <p-autoComplete
+      [ngClass]="{
+        'ng-invalid': isInvalidField('workplace'),
+        'ng-dirty': isInvalidField('workplace')
+      }"
+      formControlName="workplace"
       [dropdown]="true"
-      [suggestions]="filteredCountries"
-      (completeMethod)="filterCountry($event)"
-      field="name"
+      [suggestions]="filteredWorkPlaces"
+      (completeMethod)="filterWorkPlaces($event)"
+      field="workPlace"
     ></p-autoComplete>
+    @if (isInvalidField('workplace')) {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    }
   </div>
   <div class="field col-12 md:col-5">
     <label for="username">Salario</label>
-    <input pInputText id="username" aria-describedby="username-help" />
+    <input
+      [ngClass]="{
+        'ng-invalid': isInvalidField('salary'),
+        'ng-dirty': isInvalidField('salary')
+      }"
+      formControlName="salary"
+      pInputText
+      id="username"
+      aria-describedby="username-help"
+    />
+    @switch (isInvalidField('salary')) { @case ('required') {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    } @case ('pattern') {
+    <span class="block mt-2 text-red-500 text-xs font-normal">
+      *Debe ser un numero o decimales.</span
+    >
+    } }
+  </div>
+  <div class="field col-12 md:col-5">
+    <label for="username">Carrera</label>
+    <input
+      [ngClass]="{
+        'ng-invalid': isInvalidField('career'),
+        'ng-dirty': isInvalidField('career')
+      }"
+      formControlName="career"
+      pInputText
+      id="username"
+      aria-describedby="username-help"
+    />
+    @switch (isInvalidField('career')) { @case ('required') {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    } @case ('pattern') {
+    <span class="block mt-2 text-red-500 text-xs font-normal">
+      *No debe tener caracteres especiales.</span
+    >
+    } }
   </div>
   <div class="field col-12 md:col-5 mb-3">
     <label for="username">Años de Experiencia</label>
-    <p-inputNumber id="username" aria-describedby="username-help" />
+    <p-inputNumber
+      [ngClass]="{
+        'ng-invalid': isInvalidField('experienceYears'),
+        'ng-dirty': isInvalidField('experienceYears')
+      }"
+      formControlName="experienceYears"
+      id="username"
+      aria-describedby="username-help"
+    />
+    @if (isInvalidField('experienceYears')) {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    }
   </div>
-  <p-button type="submit" label="Finalizar" icon="pi pi-arrow-right"></p-button>
+  <!-- <pre> {{ academicInformationForm.controls["salary"].errors | json }} </pre> -->
+
+  <p-button class="block col-11" type="submit" label="Finalizar" icon="pi pi-arrow-right"></p-button>
 </div>

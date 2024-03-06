@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,6 +7,10 @@ import {
   AutoCompleteCompleteEvent,
   AutoCompleteModule,
 } from 'primeng/autocomplete';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ValidatorsService } from '../../services/validators.service';
+import { Degree, WorkPlace } from '../../interfaces/user.interface';
+import { WorkPlaceService } from '../../services/work-place.service';
 
 @Component({
   selector: 'app-academic',
@@ -17,47 +21,63 @@ import {
     AutoCompleteModule,
     ButtonModule,
     InputTextModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './academic.component.html',
   styleUrl: './academic.component.css',
 })
-export class AcademicComponent {
-  items: any[] | undefined;
+export class AcademicComponent implements OnInit {
+  degrees: Degree[] = [
+    { id: 1, name: 'Bachiller' },
+    { id: 2, name: 'Master' },
+    { id: 3, name: 'Doctor' },
+  ];
+  filteredDegrees: Degree[] = [];
 
-  selectedItem: any;
+  workPlaces: WorkPlace[] = [];
+  filteredWorkPlaces: WorkPlace[] = [];
 
-  suggestions!: any[];
+  constructor(
+    private fb: FormBuilder,
+    private validatorsService: ValidatorsService,
+    private workPlaceServices: WorkPlaceService
+  ) {}
 
-  search(event: AutoCompleteCompleteEvent) {
-    this.suggestions = [...Array(10).keys()].map(
-      (item) => event.query + '-' + item
+  academicInformationForm = this.fb.group({
+    degree: ['', [Validators.required]],
+    workplace: ['', [Validators.required]],
+    salary: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+    career: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+    experienceYears: ['', [Validators.required]]
+  });
+
+  ngOnInit() {
+    this.workPlaceServices.getWorkPlaces().subscribe((res) => {
+      if (res) {
+        this.workPlaces = res;
+      }
+    });
+  }
+
+  filterDegree(event: AutoCompleteCompleteEvent) {
+    let query = event.query;
+    this.filteredDegrees = this.degrees.filter(
+      (country) => country.name.toLowerCase().indexOf(query.toLowerCase()) === 0
     );
   }
-  countries: any[] | undefined;
 
-  selectedCountry: any;
+  filterWorkPlaces(event: AutoCompleteCompleteEvent) {
+    let query = event.query;
+    this.filteredWorkPlaces = this.workPlaces.filter(
+      (country) =>
+        country.workPlace.toLowerCase().indexOf(query.toLowerCase()) === 0
+    );
+  }
 
-  filteredCountries!: any[];
-
-  // constructor(private countryService: CountryService) {}
-
-  // ngOnInit() {
-  //     this.countryService.getCountries().then((countries) => {
-  //         this.countries = countries;
-  //     });
-  // }
-
-  filterCountry(event: AutoCompleteCompleteEvent) {
-      let filtered: any[] = [];
-      let query = event.query;
-
-      for (let i = 0; i < (this.countries as any[]).length; i++) {
-          let country = (this.countries as any[])[i];
-          if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-              filtered.push(country);
-          }
-      }
-
-      this.filteredCountries = filtered;
+  isInvalidField(field: string) {
+    return this.validatorsService.isInvalidField(
+      this.academicInformationForm,
+      field
+    );
   }
 }

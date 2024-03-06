@@ -14,3 +14,13 @@ export interface User {
   salary?:           number;
   experienceYears?:  number;
 }
+
+export interface Degree {
+  id:number;
+  name: string;
+}
+
+export interface WorkPlace {
+  id: number;
+  workPlace: string;
+}
