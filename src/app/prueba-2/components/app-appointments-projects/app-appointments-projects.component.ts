@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AppointmentsService } from '../../services/appointments.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointments } from '../../interfaces/appointment.interface';
-import * as moment from 'moment';
+import moment from 'moment';
 import { AppointmentsResponse } from '../../interfaces/interfaces-response/appointment.response.interface';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 
@@ -20,6 +20,7 @@ export class AppAppointmentsProjectsComponent implements OnInit {
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
+
   appointments: AppointmentsResponse[] = [];
   loading: boolean = false;
   idProject: number = 0;
@@ -29,25 +30,26 @@ export class AppAppointmentsProjectsComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.idProject = params['id'];
     });
-    // this.filterFrom = moment().clone().startOf('month').toDate();
-    // this.filterTo = moment().toDate();
+    this.filterFrom = moment().clone().startOf('month').toDate();
+    this.filterTo = moment().toDate();
     this.loadAppointmentsByRangeRegister();
   }
+  
   getAppointmentsByProjectRegister(
     idProyecto: number,
     fechainic: string,
     fechafin: string
   ): void {
-    // this.loading = true;
-    // setTimeout(() => {
-    //   this.appointmentService
-    //     .getAppointmentsByProjectRegister(idProyecto, fechainic, fechafin)
-    //     .subscribe((appointments) => {
-    //       this.appointments = appointments;
-    //       console.log(this.appointments);
-    //       this.loading = false;
-    //     });
-    // }, 1000);
+    this.loading = true;
+    setTimeout(() => {
+      this.appointmentService
+        .getAppointmentsByProjectRegister(idProyecto, fechainic, fechafin)
+        .subscribe((appointments) => {
+          this.appointments = appointments;
+          console.log(this.appointments);
+          this.loading = false;
+        });
+    }, 1000);
   }
   onFromChange(event: Date): void {
     this.filterFrom = event;
@@ -56,11 +58,11 @@ export class AppAppointmentsProjectsComponent implements OnInit {
     this.filterTo = event;
   }
   loadAppointmentsByRangeRegister(): void {
-    // this.getAppointmentsByProjectRegister(
-    //   this.idProject,
-    //   moment(this.filterFrom).format('YYYY-MM-DD'),
-    //   moment(this.filterTo).format('YYYY-MM-DD')
-    // );
+    this.getAppointmentsByProjectRegister(
+      this.idProject,
+      moment(this.filterFrom).format('YYYY-MM-DD'),
+      moment(this.filterTo).format('YYYY-MM-DD')
+    );
   }
   filersApply(): void {
     // this.getLeadsByStatus(this.idGerencia, this.selectedStatus);
