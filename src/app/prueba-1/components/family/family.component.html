@@ -1,21 +1,64 @@
-<div class="card w-full py-7 flex flex-column align-items-center gap-5">
+<div
+  [formGroup]="personalInformationForm"
+  (ngSubmit)="onSubmit()"
+  class="card w-full py-7 flex flex-column align-items-center gap-5"
+>
   <div>
     <label for="buttondisplay" class="font-bold block mb-2">
       Fecha de Nacimiento
     </label>
-    <p-calendar [showIcon]="true" inputId="buttondisplay"></p-calendar>
+    <p-calendar
+      [ngClass]="{
+        'ng-invalid': isInvalidField('birthDate'),
+        'ng-dirty': isInvalidField('birthDate')
+      }"
+      formControlName="birthDate"
+      [showIcon]="true"
+      inputId="buttondisplay"
+    ></p-calendar>
+    @if (isInvalidField('birthDate')) {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    }
   </div>
   <div>
     <label for="buttondisplay2" class="font-bold block mb-2">
       Fecha de Registro
     </label>
-    <p-calendar [showIcon]="true" inputId="buttondisplay2"></p-calendar>
+    <p-calendar
+      [ngClass]="{
+        'ng-invalid': isInvalidField('registrationDate'),
+        'ng-dirty': isInvalidField('registrationDate')
+      }"
+      formControlName="registrationDate"
+      [showIcon]="true"
+      inputId="buttondisplay2"
+    ></p-calendar>
+    @switch (isInvalidField('registrationDate')) { @case ('required') {
+    <span class="block mt-2 text-red-500 text-xs font-normal"
+      >*Este campo es requerido</span
+    >
+    } @case ('notMinor') {
+    <span class="block mt-2 text-red-500 text-xs font-normal">
+      *La fecha de registro debe ser mayor.</span
+    >
+    } }
   </div>
   <div>
     <label for="buttondisplay3" class="font-bold block mb-2">
       Recha de Nacimiento (Cónyuge)
     </label>
-    <p-calendar [showIcon]="true" inputId="buttondisplay3"></p-calendar>
+    <p-calendar
+      formControlName="spouseBirthDate"
+      [showIcon]="true"
+      inputId="buttondisplay3"
+    ></p-calendar>
   </div>
-  <p-button type="submit" label="Siguiente" icon="pi pi-arrow-right"></p-button>
+  <p-button
+    type="submit"
+    (click)="onSubmit()"
+    label="Siguiente"
+    icon="pi pi-arrow-right"
+  ></p-button>
 </div>
